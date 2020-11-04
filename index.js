@@ -2,8 +2,8 @@ const express = require("express");
 
 const app = express();
 
-app.get("/api", (req, res)=>{
-    res.send({method: "GET"})
+app.get("/appName", (req, res)=>{
+    res.send({appName: "Agro App!"})
 
 })
 
