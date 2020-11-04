@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 
 app.get("/appName", (req, res)=>{
-    res.send({appName: "Agro App!"})
+    res.send({appName: "AGRO APP"})
 
 })
 
