@@ -19,11 +19,11 @@ app.get("/todos", (req, res) => {
 
 app.put("/todos", (req, res) => {
     console.log(req)
-    if (req.body.title) {
-        let newTodo = {id: Date.now().toString(), title: req.body.title}
-        todos.push(newTodo)
-        res.send({status: 201})
-    }
+    //if (req.body.title) {
+    //    let newTodo = {id: Date.now().toString(), title: req.body.title}
+    //    todos.push(newTodo)
+    //    res.send({status: 201})
+    //}
 })
 
 app.listen(4000, () => {
