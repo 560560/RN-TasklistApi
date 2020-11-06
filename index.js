@@ -1,29 +1,24 @@
 const express = require("express");
-
 const app = express();
-
-
-let todos = [
-    {id: "1", title: "Test todo"},
-
-]
+app.use(express.json())
+let todos = [{id: "1", title: "Test todo"}]
 
 app.get("/appName", (req, res) => {
     res.send({appName: "AGRO APP"})
-
 })
 
 app.get("/todos", (req, res) => {
     res.send(todos)
 })
 
-app.put("/todos", (req, res) => {
-    console.log(req)
-    //if (req.body.title) {
-    //    let newTodo = {id: Date.now().toString(), title: req.body.title}
-    //    todos.push(newTodo)
-    //    res.send({status: 201})
-    //}
+app.post("/todos", (req, res) => {
+    console.log(req.body)
+
+    if (req.body.title) {
+        let newTodo = {id: Date.now().toString(), title: req.body.title}
+        todos.push(newTodo)
+        res.send({status: 201})
+    }
 })
 
 app.listen(4000, () => {
