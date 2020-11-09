@@ -14,7 +14,7 @@ app.get("/todos", (req, res) => {
 app.post("/todos", (req, res) => {
     if (req.body.title) {
         let newTodo = {id: Date.now().toString(), title: req.body.title}
-        todos.push(newTodo)
+        todos.unshift(newTodo)
         res.send({
             status: 201,
             newTodo
