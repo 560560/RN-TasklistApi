@@ -4,7 +4,6 @@ app.use(express.json())
 let todos = [{id: "1", title: "Test todo"}]
 
 app.get("/appName", (req, res) => {
-    console.log(1234)
     res.send({appName: "AGRO APP!"})
 })
 
@@ -24,7 +23,13 @@ app.post("/todos", (req, res) => {
 })
 
 app.delete("/todos", (req, res) => {
-    console.log(req)
+    if (req.body.id){
+        todos = todos.filter(todo => todo.id !== req.body.id)
+        res.send({
+            message: `Todo with id " ${req.body.id} was delete successfully`,
+            status: "Success"
+        })
+    }
 
 })
 app.listen(4000, () => {
