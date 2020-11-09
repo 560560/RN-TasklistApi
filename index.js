@@ -12,8 +12,6 @@ app.get("/todos", (req, res) => {
 })
 
 app.post("/todos", (req, res) => {
-    console.log(req.body)
-
     if (req.body.title) {
         let newTodo = {id: Date.now().toString(), title: req.body.title}
         todos.push(newTodo)
@@ -24,6 +22,15 @@ app.post("/todos", (req, res) => {
     }
 })
 
+app.delete("/todos", (req, res) => {
+    if (req.body.id){
+        todos = todos.filter(todo => todo.id !== req.body.id)
+        res.send({
+            message: `Todo with id " ${req.body.id} was delete successfully`,
+            status: "Success"
+        })
+    }
+})
 app.listen(4000, () => {
     console.log("Server is listening")
 })
