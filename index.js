@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
 app.use(express.json())
-let todos = [{id: "1", title: "Test todo"}]
+let todos = [{id: "1", title: "Тестовая задача"}]
 
 app.get("/appName", (req, res) => {
-    res.send({appName: "AGRO APP!"})
+    res.send({appName: "СПИСОК ЗАДАЧ"})
 })
 
 app.get("/todos", (req, res) => {
