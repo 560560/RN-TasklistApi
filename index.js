@@ -39,7 +39,7 @@ app.post("/todo", (req, res) => {
         let todoForAnswer = todos.filter(todo => todo.id === req.body.id)
         res.send({
             status: 201,
-            todoForAnswer
+            modifidedTodo: todoForAnswer
         })
     }
 })
