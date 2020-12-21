@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 app.use(express.json())
+
 let todos = [{id: "1", title: "Тестовая задача", isDone: true}]
 
 app.get("/appName", (req, res) => {
@@ -24,7 +25,7 @@ app.post("/todos", (req, res) => {
     }
 })
 
-app.post("/todo", (req, res) => {
+app.post("/todo-done", (req, res) => {
     if (req.body.id) {
 
         todos.map(todo => {
@@ -43,6 +44,31 @@ app.post("/todo", (req, res) => {
         })
     }
 })
+
+
+app.post("/todo-edit", (req, res) => {
+    if (req.body.id && req.body.newTitle) {
+
+        todos.map(todo => {
+            if (todo.id === req.body.id) {
+                todo.title = req.body.newTitle
+                return todo
+            } else {
+                return todo
+            }
+
+        })
+        let todoForAnswer = todos.filter(todo => todo.id === req.body.id)
+        res.send({
+            status: 201,
+            modifidedTodo: todoForAnswer
+        })
+    }
+})
+
+
+
+
 
 app.delete("/todos", (req, res) => {
     if (req.body.id){
