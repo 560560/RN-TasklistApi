@@ -1,17 +1,41 @@
-const express = require("express");
-const app = express();
+const express = require("express")
+const app = express()
+const mongoose = require("mongoose")
+require("dotenv/config")
+
+const PORT = process.env.PORT || 4000
 app.use(express.json())
 
-let todos = [{id: "1", title: "Тестовая задача", isDone: true}]
+const todosRoute = require("./routes/todos")
 
+app.use("/", todosRoute)
+
+async function start() {
+    try {
+        await mongoose.connect(process.env.DB_CONNECTION,
+            {
+                useNewUrlParser: true,
+                useFindAndModify: false,
+                useUnifiedTopology: true,
+            },
+            () => {
+                console.log("Connected to DB")
+            })
+        app.listen(PORT, () => {
+            console.log("Server is listening")
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+/*
 app.get("/appName", (req, res) => {
     res.send({appName: "СПИСОК ЗАДАЧ"})
 })
-
 app.get("/todos", (req, res) => {
     res.send(todos)
 })
-
 app.post("/todos", (req, res) => {
     if (req.body.title) {
         let newTodo = {id: Date.now().toString(), title: req.body.title, isDone: false}
@@ -24,7 +48,6 @@ app.post("/todos", (req, res) => {
         })
     }
 })
-
 app.post("/todo-done", (req, res) => {
     if (req.body.id) {
 
@@ -44,8 +67,6 @@ app.post("/todo-done", (req, res) => {
         })
     }
 })
-
-
 app.post("/todo-edit", (req, res) => {
     if (req.body.id && req.body.newTitle) {
 
@@ -65,13 +86,8 @@ app.post("/todo-edit", (req, res) => {
         })
     }
 })
-
-
-
-
-
 app.delete("/todos", (req, res) => {
-    if (req.body.id){
+    if (req.body.id) {
         todos = todos.filter(todo => todo.id !== req.body.id)
         res.send({
             message: `Todo with id " ${req.body.id} was delete successfully`,
@@ -80,6 +96,7 @@ app.delete("/todos", (req, res) => {
     }
 
 })
-app.listen(4000, () => {
-    console.log("Server is listening")
-})
+*/
+
+
+start()
