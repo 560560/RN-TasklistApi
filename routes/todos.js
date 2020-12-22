@@ -88,7 +88,7 @@ router.post("/todo-edit", async (req, res) => {
 router.delete("/todos", async (req, res) => {
     try {
         if (req.body.id) {
-            const removedTodo = await Todo.remove({_id: req.body.id})
+            const removedTodo = await Todo.deleteOne({_id: req.body.id})
             if (removedTodo["deletedCount"] === 1) {
                 res.send({
                     message: `Todo with id ${req.body.id} was delete successfully`,
