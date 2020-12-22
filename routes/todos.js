@@ -35,19 +35,24 @@ router.post("/todos", async (req, res) => {
     }
 })
 
-router.post("/todo-done",async (req, res) => {
+router.post("/todo-done", async (req, res) => {
     try {
-
-        if (req.body.id && req.body.isDone) {
-            const updatedTodo = await Todo.updateOne({_id: req.body.id}, {isDone: req.body.isDone})
-
-            res.send({
-                status: 201,
-                modifidedTodo: updatedTodo
-            })
+        if (req.body.id) {
+            const updateStatus = await Todo.updateOne({_id: req.body.id}, {isDone: req.body.isDone})
+            const modifidedTodo = await Todo.findById(req.body.id)
+            if (updateStatus.nModified) {
+                res.send({
+                    status: "Success",
+                    modifidedTodo: modifidedTodo
+                })
+            } else {
+                res.send({
+                    status: "Fail"
+                })
+            }
         }
-    }
-    catch (err) {
+    } catch
+        (err) {
         console.log(err)
 
     }
@@ -57,20 +62,26 @@ router.post("/todo-edit", async (req, res) => {
     try {
 
         if (req.body.id && req.body.newTitle) {
-            const updatedTodo = await Todo.updateOne({_id: req.body.id}, {title: req.body.newTitle})
+            const updateStatus = await Todo.updateOne({_id: req.body.id}, {title: req.body.newTitle})
+            const modifidedTodo = await Todo.findById(req.body.id)
 
-            res.send({
-                status: 201,
-                modifidedTodo: updatedTodo
-            })
+            if (updateStatus.nModified) {
+                res.send({
+                    status: "Success",
+                    modifidedTodo: modifidedTodo
+                })
+            } else {
+                res.send({
+                    status: "Fail"
+                })
+            }
         }
 
-    }
-    catch (err) {
+
+    } catch (err) {
         console.log(err)
 
     }
-
 
 })
 
