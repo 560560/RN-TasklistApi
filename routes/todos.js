@@ -7,6 +7,10 @@ router.get("/appName", (req, res) => {
     res.send({appName: "СПИСОК ЗАДАЧ"})
 })
 
+router.get("/status", (req, res) => {
+    res.send({status: true})
+})
+
 router.get("/todos", async (req, res) => {
     try {
         const todos = await Todo.find().sort({_id: -1})
