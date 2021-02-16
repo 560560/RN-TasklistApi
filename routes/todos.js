@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const uuid = require('uuid');
+const moment = require('moment');
+const tz = require('moment-timezone');
 const Todo = require('../models/todo');
 const User = require('../models/user');
 
@@ -24,8 +26,8 @@ router.get('/todos', async (req, res) => {
 
 router.post('/todos', async (req, res) => {
   if (req?.body?.title) {
-    const date = new Date();
-    const currentDate = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+    const date = moment()
+    const currentDate = date.tz("Asia/Yekaterinburg")
     let newTodo = new Todo({
       title: req.body.title,
       isDone: false,

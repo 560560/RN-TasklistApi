@@ -10,7 +10,7 @@ const TodoSchema = mongoose.Schema({
     required: true,
   },
   created: {
-    type: Date,
+    type: String,
     required: true,
   },
   profileId: {
