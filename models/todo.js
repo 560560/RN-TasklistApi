@@ -3,12 +3,20 @@ const mongoose = require("mongoose")
 const TodoSchema = mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
     },
     isDone: {
         type: Boolean,
-        required: true
+        required: true,
+    },
+    created: {
+        type: Date,
+        required: true,
+    },
+    profileId: {
+        type: String,
+        required:true
     },
 })
 
-module.exports = mongoose.model("Todo", TodoSchema)
+module.exports = mongoose.model("todo", TodoSchema)
