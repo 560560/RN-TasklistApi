@@ -22,11 +22,24 @@ router.get('/status', (req, res) => {
 });
 
 router.get('/todos', async (req, res) => {
-  try {
-    const todos = await Todo.find().sort({_id: -1});
-    res.send(todos);
-  } catch (err) {
-    console.log(err);
+  if (req?.params?.authKey) {
+    const profileId = await profileIdGetter(req.params.authKey);
+    if (profileId) {
+      try {
+        const todos = await Todo.find({'profileId': profileId}).sort({_id: -1});
+        res.send(todos);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      res.send({
+        status: 'Auth Fail',
+      });
+    }
+  } else {
+    res.send({
+      status: 'Empty authKey',
+    });
   }
 });
 
@@ -45,7 +58,7 @@ router.post('/todos', async (req, res) => {
         });
         const savedTodo = await newTodo.save();
         res.send({
-          status: "Created",
+          status: 'Created',
           savedTodo: savedTodo,
         });
       } catch (err) {
@@ -75,7 +88,7 @@ router.post('/todo-done', async (req, res) => {
         const updateStatus = await Todo.updateOne({
           '_id': req.body.id,
           'profileId': profileId,
-        }, {"isDone": req.body.isDone});
+        }, {'isDone': req.body.isDone});
         const modifidedTodo = await Todo.findById(req.body.id);
         if (updateStatus.nModified) {
           res.send({
@@ -113,7 +126,7 @@ router.post('/todo-edit', async (req, res) => {
       try {
         const updateStatus = await Todo.updateOne({
           '_id': req.body.id, 'profileId': profileId,
-        }, {"title": req.body.newTitle});
+        }, {'title': req.body.newTitle});
         const modifidedTodo = await Todo.findById(req.body.id);
         if (updateStatus.nModified) {
           res.send({
@@ -187,7 +200,6 @@ router.delete('/todos', async (req, res) => {
 
 
 router.post('/register', async (req, res) => {
-
   if (req?.body?.email && req?.body?.password && req?.body?.name) {
     let newUser = new User({
       name: req.body.name,
