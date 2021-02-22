@@ -225,18 +225,31 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     if (req?.body?.email && req?.body?.password) {
-      let foundUser = await User.findOneAndUpdate(
+      const foundUser = await User.findOneAndUpdate(
           {
             'email': req.body.email,
             'password': req.body.password,
           }, {'authKey': uuid.v1()},
       );
-      let modifidedUser = await User.find({'email': req.body.email});
-      if (modifidedUser) {
-        res.send({
-          status: 'Authorize success',
-          authKey: modifidedUser?.[0]?.authKey,
-        });
+      if (!foundUser) {
+        const checkUserRegistration = await User.findOne({'email': req.body.email})
+        if (checkUserRegistration) {
+          res.send({
+            status: 'Wrong password',
+          });
+        } else {
+          res.send({
+            status: 'No user',
+          });
+        }
+      } else {
+        const modifidedUser = await User.find({'email': req.body.email});
+        if (modifidedUser) {
+          res.send({
+            status: 'Authorize success',
+            authKey: modifidedUser?.[0]?.authKey,
+          });
+        }
       }
     }
   } catch (err) {
