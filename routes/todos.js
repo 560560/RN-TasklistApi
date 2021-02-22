@@ -32,7 +32,7 @@ router.get('/todos', async (req, res) => {
           todos: todos,
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     } else {
       res.send({
@@ -65,7 +65,7 @@ router.post('/todos', async (req, res) => {
           savedTodo: savedTodo,
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     } else {
       res.send({
@@ -104,7 +104,7 @@ router.post('/todo-done', async (req, res) => {
           });
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     } else {
       res.send({
@@ -143,7 +143,7 @@ router.post('/todo-edit', async (req, res) => {
         }
 
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     } else {
       res.send({
@@ -183,7 +183,7 @@ router.delete('/todos', async (req, res) => {
           });
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     } else {
       res.send({
@@ -212,12 +212,11 @@ router.post('/register', async (req, res) => {
     });
     try {
       const savedUser = await newUser.save();
-      console.log('savedUser = ', savedUser);
       res.send({
         status: 201,
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 });
@@ -248,12 +247,13 @@ router.post('/login', async (req, res) => {
           res.send({
             status: 'Authorize success',
             authKey: modifidedUser?.[0]?.authKey,
+            name: modifidedUser?.[0]?.name
           });
         }
       }
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 });
 
