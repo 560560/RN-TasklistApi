@@ -27,7 +27,10 @@ router.get('/todos', async (req, res) => {
     if (profileId) {
       try {
         const todos = await Todo.find({'profileId': profileId}).sort({_id: -1});
-        res.send(todos);
+        res.send({
+          status: 'Loaded',
+          todos: todos,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -58,7 +61,7 @@ router.post('/todos', async (req, res) => {
         });
         const savedTodo = await newTodo.save();
         res.send({
-          status: "Created",
+          status: 'Created',
           savedTodo: savedTodo,
         });
       } catch (err) {
@@ -88,7 +91,7 @@ router.post('/todo-done', async (req, res) => {
         const updateStatus = await Todo.updateOne({
           '_id': req.body.id,
           'profileId': profileId,
-        }, {"isDone": req.body.isDone});
+        }, {'isDone': req.body.isDone});
         const modifidedTodo = await Todo.findById(req.body.id);
         if (updateStatus.nModified) {
           res.send({
@@ -126,7 +129,7 @@ router.post('/todo-edit', async (req, res) => {
       try {
         const updateStatus = await Todo.updateOne({
           '_id': req.body.id, 'profileId': profileId,
-        }, {"title": req.body.newTitle});
+        }, {'title': req.body.newTitle});
         const modifidedTodo = await Todo.findById(req.body.id);
         if (updateStatus.nModified) {
           res.send({
