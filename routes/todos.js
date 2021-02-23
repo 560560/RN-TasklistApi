@@ -205,18 +205,25 @@ router.delete('/todos', async (req, res) => {
 router.post('/register', async (req, res) => {
 
   if (req?.body?.email && req?.body?.password && req?.body?.name) {
-    let newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    });
-    try {
-      const savedUser = await newUser.save();
-      res.send({
-        status: 201,
+    const checkUserRegistration = await User.findOne({'email': req.body.email})
+    if (!checkUserRegistration) {
+      let newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
       });
-    } catch (err) {
-      console.error(err);
+      try {
+        const savedUser = await newUser.save();
+        res.send({
+          status: 'Created',
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      res.send({
+        status: 'Already exist',
+      });
     }
   }
 });
