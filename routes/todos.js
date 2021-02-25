@@ -201,11 +201,10 @@ router.delete('/todos', async (req, res) => {
   }
 });
 
-
 router.post('/register', async (req, res) => {
 
   if (req?.body?.email && req?.body?.password && req?.body?.name) {
-    const checkUserRegistration = await User.findOne({'email': req.body.email})
+    const checkUserRegistration = await User.findOne({'email': req.body.email});
     if (!checkUserRegistration) {
       let newUser = new User({
         name: req.body.name,
@@ -231,14 +230,15 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     if (req?.body?.email && req?.body?.password) {
-      const foundUser = await User.findOneAndUpdate(
+      const foundUser = await User.findOne(
           {
             'email': req.body.email,
             'password': req.body.password,
-          }, {'authKey': uuid.v1()},
+          },
       );
+
       if (!foundUser) {
-        const checkUserRegistration = await User.findOne({'email': req.body.email})
+        const checkUserRegistration = await User.findOne({'email': req.body.email});
         if (checkUserRegistration) {
           res.send({
             status: 'Wrong password',
@@ -248,15 +248,20 @@ router.post('/login', async (req, res) => {
             status: 'No user',
           });
         }
-      } else {
-        const modifidedUser = await User.find({'email': req.body.email});
-        if (modifidedUser) {
-          res.send({
-            status: 'Authorize success',
-            authKey: modifidedUser?.[0]?.authKey,
-            name: modifidedUser?.[0]?.name
-          });
-        }
+      } else if (foundUser && foundUser.authKey) {
+        res.send({
+          status: 'Authorize success',
+          authKey: foundUser?.authKey,
+          name: foundUser?.name,
+        });
+      } else if (foundUser && !foundUser.authKey) {
+        const setUserAuthKey = await User.findOneAndUpdate({'email': req.body.email}, {'authKey': uuid.v1()});
+        const modifiedUser = await User.findOne({'email': req.body.email});
+        res.send({
+          status: 'Authorize success1',
+          authKey: modifiedUser?.authKey,
+          name: modifiedUser?.name,
+        });
       }
     }
   } catch (err) {
