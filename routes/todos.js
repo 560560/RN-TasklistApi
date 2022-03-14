@@ -46,6 +46,36 @@ router.get('/todos', async (req, res) => {
   }
 });
 
+router.get('/done-todos', async (req, res) => {
+  if (req?.query?.authKey) {
+    const profileId = await profileIdGetter(req.query.authKey);
+    const offset = Number(req.query.offset);
+    const query = req.query.query
+    if (profileId) {
+      try {
+        const todos = await Todo
+            .find({'profileId': profileId, 'isDone': true, 'title': new RegExp(`${query}`, 'i')})
+            .sort({_id: -1})
+            .limit(offset);
+        res.send({
+          status: 'Loaded',
+          doneTodos: todos,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      res.send({
+        status: 'Auth Fail',
+      });
+    }
+  } else {
+    res.send({
+      status: 'Empty authKey',
+    });
+  }
+});
+
 router.post('/todos', async (req, res) => {
   if (req?.body?.title && req?.body?.authKey) {
     const date = moment();
